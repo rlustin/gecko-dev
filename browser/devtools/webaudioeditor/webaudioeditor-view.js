@@ -38,7 +38,7 @@ const GENERIC_VARIABLES_VIEW_SETTINGS = {
   editableValueTooltip: "",
   editableNameTooltip: "",
   preventDisableOnChange: true,
-  preventDescriptorModifiers: true,
+  preventDescriptorModifiers: false,
   eval: () => {}
 };
 
@@ -424,8 +424,11 @@ let WebAudioInspectorView = {
     // when there are no props i.e. AudioDestinationNode
     this._togglePropertiesView(!!props.length);
 
-    props.forEach(({ param, value }) => {
-      let descriptor = { value: value };
+    props.forEach(({ param, value, flags }) => {
+      let descriptor = {
+        value: value,
+        writable: !flags || !flags.readonly,
+      };
       audioParamsScope.addItem(param, descriptor);
     });
 
